@@ -2,13 +2,13 @@ import pandas as pd
 import sys
 import string
 import secrets # Para gerar Senhas aleatorias
-
+from openpyxl import Workbook # para criar um objeto planilha
 # Abre arquivo para a escrita
 
 try:
   
-    call_group = int(input("CallGroup: "))
-    pick_group = int(input("PickGroup: "))
+   # call_group = int(input("CallGroup: "))
+    pick_group = int(input("Servidor: "))
     contexto = int(input("Contexto do Condominio (Ex: 22): "))
 
     ap_andar = int(input("Numero de andar por prédio: "))
@@ -64,19 +64,19 @@ try:
 
     # Abre arquivo
     saida = open("pjsip_additional.txt" , "w")
-
-    #Tratando de senhas
-
-    caracteres = string.ascii_letters + string.digits
-
-    while True:
-        password = ''.join(secrets.choice(caracteres) for i in range(20))
-        if (any(c.islower() for c in password)
-                and any(c.isupper() for c in password)
-                and sum(c.isdigit() for c in password) >= 3):
-            break
-
+    
     qt = len(ramal)
+    #Tratando de senhas
+    allPassword = []
+    caracteres = string.ascii_letters + string.digits
+    for i in range(qt):
+        while True:
+            password = ''.join(secrets.choice(caracteres) for i in range(20))
+            if (any(c.islower() for c in password)
+                    and any(c.isupper() for c in password)
+                    and sum(c.isdigit() for c in password) >= 3):
+                break
+        allPassword.append(password)
     print("----------GERANDO PJSIP_ADDITIONAL.TXT-----------")
 
     for i in range(qt):
@@ -93,7 +93,7 @@ trust_id_inbound=yes
 send_rpid=no
 transport=transport-udp
 rtcp_mux=no
-call_group={call_group}
+call_group={contexto}
 pickup_group={pick_group}
 allow=ulaw,alaw,h264,h263
 mailboxes=1001@default
@@ -121,7 +121,7 @@ callerid={display[i]} <{ramal[i]}>
 type=auth
 auth_type=userpass
 username={ramal[i]}
-password={password}
+password={allPassword[i]}
 
 [{ramal[i]}]
 type=aor
@@ -133,6 +133,24 @@ authenticate_qualify=no
 '''
         saida.write(padrao + "\n")
 
+    resp = input("Deseja gerar uma planilha com as informações dos ramais? [S/N] ").strip().lower()
+
+    if resp == "s":
+
+        # Cria DataFrame
+        dados = pd.DataFrame({
+            "UserName": ramal,
+            "Display": display,
+            "Password": allPassword,
+            "Contexto": [f"Condomínio-{contexto}"] * len(ramal),
+            "CallGroup": contexto,
+            "PickGroup": pick_group
+        })
+
+        # Salva planilha final usando pandas
+        dados.to_excel("planilha.xlsx", index=False)
+
+      
 
 except FileExistsError:
     print("ERRO AO ABRIR ARQUIVO PARA ESCRITA")
