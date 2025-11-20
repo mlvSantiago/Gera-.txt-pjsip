@@ -15,3 +15,5 @@ resp = input("Deseja gerar os respectivos Qr Codes para os ramais? [S/N]").strip
 if resp == 's':
     
     geraQrCode(ramal,allPassword,display)
+
+print("\n\n------FIM DO PROGRAMA-----\n\n")

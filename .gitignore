@@ -1,6 +1,4 @@
-# Ignorar arquivos de saída
-output/*
-!output/.gitkeep
+
 
 # Ignorar QR Codes
 output/qrCodes/*
