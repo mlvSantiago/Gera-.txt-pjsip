@@ -1,0 +1,8 @@
+#planilhas pessoais
+.xlsx
+
+#txt pessoal
+output/*.txt
+
+#qrCodes pessoais
+output/qrCodes/*.png
