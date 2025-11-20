@@ -4,7 +4,7 @@ output/qrCodes/*.png
 
 
 # Ignorar planilhas e textos gerados
-*.xlsx
+output/*.xlsx
 output/*.txt
 
 # Ignorar cache do Python
