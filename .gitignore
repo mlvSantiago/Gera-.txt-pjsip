@@ -1,8 +1,21 @@
-#planilhas pessoais
-.xlsx
+# Ignorar arquivos de saída
+output/*
+!output/.gitkeep
 
-#txt pessoal
-output/*.txt
+# Ignorar QR Codes
+output/qrCodes/*
 
-#qrCodes pessoais
-output/qrCodes/*.png
+# Ignorar planilhas e textos gerados
+*.xlsx
+*.txt
+
+# Ignorar cache do Python
+__pycache__/
+*.pyc
+
+# Ignorar ambiente virtual
+venv/
+.env
+
+# Ignorar arquivos temporários do Excel
+~$*.xlsx

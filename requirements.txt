@@ -1,3 +1,0 @@
-pandas
-qrcode
-Pillow
