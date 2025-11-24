@@ -74,6 +74,7 @@ def geraTxt():
                         display.append("Apto " +  str(i) +" " + letra)
                     ramaisChamadores.append(str(contexto) + str(i))
                     displayChamadores.append("Chamador " + str(i) + " ")
+                    print(i)
 
 
         # Abre arquivo
@@ -149,13 +150,13 @@ authenticate_qualify=no
             saida.write(padrao + "\n")
 
         saida.write("; =============================\n; Ramais Chamadores\n; =============================")
-        print(ramaisChamadores)
+
         
         for i in range(len(ramaisChamadores)):
-            padraoChamador = f'''
+            padraoChamador = f'''\n
 [{ramaisChamadores[i]}]
 auth=auth{ramaisChamadores[i]}
-aors={ramaisChamadores[i]}
+aors={ramaisChamadores[i]}s
 type=endpoint
 language=pt_BR
 deny=0.0.0.0/0.0.0.0

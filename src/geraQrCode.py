@@ -1,7 +1,8 @@
 import qrcode 
+import os
 from PIL import Image, ImageDraw, ImageFont
 
-def geraQrCode(ramal,password,display):
+def geraQrCode(ramal,password,display,contexto):
 
     subdomain = input( "\n\nEntre com o Subdomain dos QrCodes: (Ex:meuservidor.dominio.com:porta\n")
     qt = len(ramal)
@@ -9,16 +10,7 @@ def geraQrCode(ramal,password,display):
         
         qr = qrcode.QRCode(version= 1, error_correction= qrcode.constants.ERROR_CORRECT_M ,box_size=10 , border = 4)
     
-        padrao = f'''
-        {{
-        "sipaccounts": [
-            {{
-            "sipusername": "{ramal[i]}",
-            "sippassword": "{password[i]}",
-            "subdomain": "{subdomain}"
-            }}
-        ]
-        }}
+        padrao = f'''{{"sipaccounts": [{{"sipusername": "{ramal[i]}","sippassword": "{password[i]}","subdomain": "{subdomain}"}}]}}
         '''
         qr.add_data(padrao)
         qr.make(fit=True)
@@ -71,5 +63,7 @@ def geraQrCode(ramal,password,display):
         # -------------------------------------------------------------------
         # 🟦 3. SALVAR
         # -------------------------------------------------------------------
-        img_final.save(f"../output/qrCodes/{display[i]}.png")
+        output_dir = f"../output/qrCodes/Condominio-{contexto}"
+        os.makedirs(output_dir, exist_ok=True)
+        img_final.save(f"{output_dir}/{display[i]}.png")
         
