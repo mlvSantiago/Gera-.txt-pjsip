@@ -47,6 +47,9 @@ def geraTxt():
         ramal = []
         display = []
 
+        ramaisChamadores = []
+        displayChamadores = []
+
         for inicio , fim in faixas:
 
 
@@ -69,6 +72,8 @@ def geraTxt():
 
                         ramal.append(str(contexto) + str(i) + "0" + str(j))
                         display.append("Apto " +  str(i) +" " + letra)
+                    ramaisChamadores.append(str(contexto) + str(i))
+                    displayChamadores.append("Chamador " + str(i) + " ")
 
 
         # Abre arquivo
@@ -81,7 +86,7 @@ def geraTxt():
         caracteres = string.ascii_letters + string.digits
         for i in range(qt):
             while True:
-                password = ''.join(secrets.choice(caracteres) for i in range(20))
+                password = ''.join(secrets.choice(caracteres) for i in range(9))
                 if (any(c.islower() for c in password)
                         and any(c.isupper() for c in password)
                         and sum(c.isdigit() for c in password) >= 3):
@@ -143,15 +148,68 @@ authenticate_qualify=no
 '''
             saida.write(padrao + "\n")
 
-
-    
+        saida.write("; =============================\n; Ramais Chamadores\n; =============================")
+        print(ramaisChamadores)
         
+        for i in range(len(ramaisChamadores)):
+            padraoChamador = f'''
+[{ramaisChamadores[i]}]
+auth=auth{ramaisChamadores[i]}
+aors={ramaisChamadores[i]}
+type=endpoint
+language=pt_BR
+deny=0.0.0.0/0.0.0.0
+disallow=all
+context=followme-manual
+trust_id_inbound=yes
+send_rpid=no
+transport=transport-udp
+rtcp_mux=no
+call_group={contexto}
+pickup_group={pick_group}
+allow=ulaw,alaw,h264,h263
+mailboxes=1001@default
+permit=0.0.0.0/0.0.0.0
+ice_support=no
+use_avpf=no
+dtls_cert_file=
+dtls_private_key=
+dtls_ca_file=
+dtls_setup=actpass
+dtls_verify=no
+media_encryption=no
+message_context=messages
+subscribe_context=
+allow_subscribe=no
+stir_shaken=off
+rtp_symmetric=yes
+force_rport=yes
+rewrite_contact=yes
+direct_media=no
+media_use_received_transport=no
+callerid={displayChamadores[i]} <{ramaisChamadores[i]}>
 
+[auth{ramaisChamadores[i]}]
+type=auth
+auth_type=userpass
+username={ramaisChamadores[i]}
+password=Teste135@
+
+[{ramaisChamadores[i]}]
+type=aor
+qualify_frequency=60
+max_contacts=1
+remove_existing=yes
+qualify_timeout=3.0
+authenticate_qualify=no'''
+            saida.write(padraoChamador + "\n")
+        
     except FileExistsError:
         print("ERRO AO ABRIR ARQUIVO PARA ESCRITA")
 
     except ValueError:
         print("ERRO: Os dados fornecidos devem ser numericos")
+        raise
     except FileNotFoundError:
         print("ERRO: Planilha não encontrado")
                     

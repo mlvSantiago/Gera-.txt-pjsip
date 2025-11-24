@@ -20,15 +20,7 @@ def qrCode():
         display = planilha.loc[i, "Display"]
 
         padrao = f'''
-        {{
-        "sipaccounts": [
-            {{
-            "sipusername": "{ramal}",
-            "sippassword": "{password}",
-            "subdomain": "{subdomain}"
-            }}
-        ]
-        }}
+{{"sipaccounts":[{{"sipusername": "{ramal}","sippassword":"{password}","subdomain":"{subdomain}"}}]}}
         '''
         qr.add_data(padrao)
         qr.make(fit=True)
