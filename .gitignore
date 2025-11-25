@@ -1,11 +1,10 @@
 
-# Ignorar QR Codes
-output/qrCodes/*.png
+# Ignorar Saidas
+output/*
 
-
-# Ignorar planilhas e textos gerados
-output/*.xlsx
-output/*.txt
+# Ignorar pasta de teste
+@tests/
+tests/
 
 # Ignorar cache do Python
 __pycache__/
