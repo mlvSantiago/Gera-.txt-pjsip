@@ -4,8 +4,8 @@ from geraPlanilha import geraPlanilha
 from geraCondominioCustom import geraCondominioCuston
 
 print("----------------GERANDO PJSIP_ADDITIONAL.TXT E EXTENCION_CUSTOM.TXT---------------")
-geraCondominioCuston()
 ramal, display, allPassword, contexto , pick_group = geraTxt()
+geraCondominioCuston(contexto)
 
 resp = input("Deseja gerar uma planilha com as informações dos ramais? [S/N] ").strip().lower()
 if resp == 's':

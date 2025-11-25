@@ -63,7 +63,7 @@ def geraQrCode(ramal,password,display,contexto):
         # -------------------------------------------------------------------
         # 🟦 3. SALVAR
         # -------------------------------------------------------------------
-        output_dir = f"../output/qrCodes/Condominio-{contexto}"
+        output_dir = f"../output/Condominio-{contexto}/qrCodes"
         os.makedirs(output_dir, exist_ok=True)
         img_final.save(f"{output_dir}/{display[i]}.png")
         

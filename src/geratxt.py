@@ -1,6 +1,7 @@
 
 import string
 import secrets # Para gerar Senhas aleatorias
+import os
 
 
 # Abre arquivo para a escrita
@@ -78,7 +79,9 @@ def geraTxt():
 
 
         # Abre arquivo
-        saida = open("../output/pjsip_additional.txt" , "w")
+        output_dir = f"../output/Condominio-{contexto}"
+        os.makedirs(output_dir, exist_ok=True)
+        saida = open(f"{output_dir}/pjsip_additional.txt" , "w")
         
         qt = len(ramal)
         #Tratando de senhas
@@ -206,13 +209,13 @@ authenticate_qualify=no'''
             saida.write(padraoChamador + "\n")
         
     except FileExistsError:
-        print("ERRO AO ABRIR ARQUIVO PARA ESCRITA")
+        print("Erro: Problema ao abrir arquivo para escrita")
 
     except ValueError:
         print("ERRO: Os dados fornecidos devem ser numericos")
         raise
     except FileNotFoundError:
-        print("ERRO: Planilha não encontrado")
+        print("ERRO: Arquivo não encontrado")
                     
     finally:
         if saida is not None:

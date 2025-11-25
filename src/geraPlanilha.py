@@ -13,7 +13,7 @@ def geraPlanilha(ramal, display, allPassword, contexto , pick_group):
     })
 
     # Salva planilha final usando pandas
-    dados.to_excel("../output/planilha.xlsx", index=False)
+    dados.to_excel(f"../output/Condominio-{contexto}/planilha.xlsx", index=False)
     print("\n\n\n-----------PLANILHA GERADA---------------")
     gerou = True
 

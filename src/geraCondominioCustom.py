@@ -1,9 +1,9 @@
 
-def geraCondominioCuston():
+def geraCondominioCuston(contextoPasta):
 
     try:
 
-        arquivo  = open("../output/extensions_custom.txt" , "w")
+        arquivo  = open(f"../output/Condominio-{contextoPasta}/extensions_custom.txt" , "w")
 
     except FileExistsError:
 
