@@ -12,8 +12,7 @@ def geraCondominioCuston(contextoPasta):
 
     for contexto in range(10,51):
 
-        padrao = f'''
-[condominio-{contexto}custom]
+        padrao = f'''[condominio-{contexto}-custom]
     ; intercepta chamadas internas
               exten => _X.,1,NoOp(Chamada interna: ${{CALLERID(num)}} -> ${{EXTEN}})
     ; envia para o contexto que adiciona o prefixo
