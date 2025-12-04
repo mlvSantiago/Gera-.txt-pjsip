@@ -21,92 +21,98 @@ def geraTxt():
     ramal = []
     display = []
     allPassword = []
+    idBloco = []
     
 
 
     
     pick_group = leia_int("Servidor: ")
+    qtblocos = leia_int("Numero de blocos no Condominio: ")
     contexto = leia_int("Contexto do Condominio (Ex: 22): ")
     ap_andar = leia_int("Numero de andar por prédio: ")
 
+    for a in range(qtblocos):
 
-    print("Numeração das unidades nos andares (ex.: faixas: 10-18, 101-118, etc.)")
-    faixas = []
+        print(f"\n--- Bloco {a+1} ---\n")
 
+        id_bloco = input("Identificação dos blocos (Ex.: A, B, C ou 1, 2, 3 etc.): ")
+        idBloco.append(id_bloco)
 
-    for i in range(ap_andar):
-        entrada = input(f"Faixa {i+1}: ")          
-
-        while '-' not in entrada:
-            print("\nSEPARADOR '-' AUSENTE!\n")
-            entrada = input(f"Faixa {i+1}: ")     
-
-    
-        partes = entrada.split("-")               # divide: ["10 ", " 18"]
-        
-        # strip em cada parte
-        inicio = int(partes[0].strip())
-        fim = int(partes[1].strip())
-
-        faixas.append((inicio, fim))
-
-    # Criando ramais
-    ramal = []
-    display = []
-
-    ramaisChamadores = []
-    displayChamadores = []
-
-    for inicio , fim in faixas:
+        print("Numeração das unidades nos andares (ex.: faixas: 10-18, 101-118, etc.)")
+        faixas = []
 
 
+        for i in range(ap_andar):
+            entrada = input(f"Faixa {i+1}: ")          
 
-        for i in range(inicio, fim + 1):
+            while '-' not in entrada:
+                print("\nSEPARADOR '-' AUSENTE!\n")
+                entrada = input(f"Faixa {i+1}: ")     
 
         
+            partes = entrada.split("-")               # divide: ["10 ", " 18"]
+            
+            # strip em cada parte
+            inicio = int(partes[0].strip())
+            fim = int(partes[1].strip())
 
-                for j in range(1,5):
+            faixas.append((inicio, fim))
 
-                    match j:
-                        case 1:
-                            letra = 'A'
-                        case 2:
-                            letra = 'B'
-                        case 3:
-                            letra = 'C'
-                        case 4 :
-                            letra = 'D'
+      
 
-                    ramal.append(str(contexto) + str(i) + "0" + str(j))
-                    display.append("Apto " +  str(i) +" " + letra)
-                ramaisChamadores.append(str(contexto) + str(i))
-                displayChamadores.append("Chamador " + str(i) + " ")
-                print(i)
+        ramaisChamadores = []
+        displayChamadores = []
+
+        for inicio , fim in faixas:
 
 
-    # Abre arquivo
-    output_dir = f"../output/Condominio-{contexto}"
-    os.makedirs(output_dir, exist_ok=True)
-    saida = open(f"{output_dir}/pjsip_additional.txt" , "w")
-    
-    qt = len(ramal)
-    #Tratando de senhas
-    allPassword = []
 
-    caracteres = string.ascii_letters + string.digits
-    for i in range(qt):
-        while True:
-            password = ''.join(secrets.choice(caracteres) for i in range(9))
-            if (any(c.islower() for c in password)
-                    and any(c.isupper() for c in password)
-                    and sum(c.isdigit() for c in password) >= 3):
-                break
-        allPassword.append(password)
-    print("\n\n\n----------GERANDO PJSIP_ADDITIONAL.TXT-----------\n\n\n")
+            for i in range(inicio, fim + 1):
 
-    for i in range(qt):
-    
-        padrao = f'''[{ramal[i]}]
+            
+
+                    for j in range(1,5):
+
+                        match j:
+                            case 1:
+                                letra = 'A'
+                            case 2:
+                                letra = 'B'
+                            case 3:
+                                letra = 'C'
+                            case 4 :
+                                letra = 'D'
+
+                        ramal.append(str(contexto) + str(i) + "0" + str(j))
+                        display.append("Apto " +  str(i) +" " + letra)
+                    ramaisChamadores.append(str(contexto) + str(i))
+                    displayChamadores.append("Chamador " + str(i) + " ")
+                    print(i)
+
+
+        # Abre arquivo
+        output_dir = f"../output/Condominio-{contexto}"
+        os.makedirs(output_dir, exist_ok=True)
+        saida = open(f"{output_dir}/pjsip_additional.txt" , "w")
+        
+        qt = len(ramal)
+        #Tratando de senhas
+        allPassword = []
+
+        caracteres = string.ascii_letters + string.digits
+        for i in range(qt):
+            while True:
+                password = ''.join(secrets.choice(caracteres) for i in range(9))
+                if (any(c.islower() for c in password)
+                        and any(c.isupper() for c in password)
+                        and sum(c.isdigit() for c in password) >= 3):
+                    break
+            allPassword.append(password)
+        print("\n\n\n----------GERANDO PJSIP_ADDITIONAL.TXT-----------\n\n\n")
+
+        for i in range(qt):
+        
+            padrao = f'''[{ramal[i]}]
 auth=auth{ramal[i]}
 aors={ramal[i]}
 type=endpoint
@@ -156,13 +162,13 @@ remove_existing=no
 qualify_timeout=3.0
 authenticate_qualify=no
 '''
-        saida.write(padrao + "\n")
+            saida.write(padrao + "\n")
 
-    saida.write("; =============================\n; Ramais Chamadores\n; =============================")
+        saida.write("; =============================\n; Ramais Chamadores\n; =============================")
 
-    
-    for i in range(len(ramaisChamadores)):
-        padraoChamador = f'''\n
+        
+        for i in range(len(ramaisChamadores)):
+            padraoChamador = f'''\n
 [{ramaisChamadores[i]}]
 auth=auth{ramaisChamadores[i]}
 aors={ramaisChamadores[i]}
@@ -212,8 +218,8 @@ max_contacts=1
 remove_existing=yes
 qualify_timeout=3.0
 authenticate_qualify=no'''
-        saida.write(padraoChamador + "\n")
-    
+            saida.write(padraoChamador + "\n")
+        
 
 
-    return ramal, display, allPassword, contexto , pick_group
+    return ramal, display, allPassword, contexto , pick_group,idBloco
