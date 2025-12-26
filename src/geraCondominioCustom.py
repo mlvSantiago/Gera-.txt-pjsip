@@ -1,5 +1,5 @@
 
-def geraCondominioCuston(contextoPasta):
+def geraCondominioCuston(contextoPasta,ramal ):
 
     try:
 
@@ -9,6 +9,26 @@ def geraCondominioCuston(contextoPasta):
 
         print("ERRO AO ABRIR ARQUIVO PARA ESCRITA")
 
+    arquivo.write(f"\n;==============\n; Condominio {contextoPasta}\n;============== ")
+    j = 2
+    for i in range(len(ramal)):
+        padrao = f"exten => {ramal[i]},hint,PJSIP/{ramal[i]}&Custom:DND{ramal[i]}"
+    
+        # Separa com espaço cada andar o documento
+        if i != 0 and ramal[i-1][2] != ramal[i][2]:
+            
+            
+            arquivo.write(f"\n\n;==============  Andar {j} ==================\n\n"+padrao)
+            print(j)
+            j=j+1
+
+        arquivo.write("\n" + padrao)
+
+
+        
+
+    arquivo.write("\n;----------------------------------------------------------------\n;   Contexto para tratar Condominios em PJSIP\n;----------------------------------------------------------------\n\n")
+    
 
     for contexto in range(10,51):
 
@@ -27,6 +47,13 @@ def geraCondominioCuston(contextoPasta):
              '''
         
         arquivo.write(padrao + "\n")
+    
+
+        
+
+
+
+    
     
     
 

@@ -6,7 +6,7 @@ from geraA4QRCodes import main as geraA4QRCodes
 
 print("----------------GERANDO PJSIP_ADDITIONAL.TXT E EXTENCION_CUSTOM.TXT---------------")
 ramal, display, allPassword, contexto , pick_group , idBlocos= geraTxt()
-geraCondominioCuston(contexto)
+geraCondominioCuston(contexto, ramal)
 
 resp = input("Deseja gerar uma planilha com as informações dos ramais? [S/N] ").strip().lower()
 if resp == 's':
