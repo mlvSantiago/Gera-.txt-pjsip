@@ -26,17 +26,29 @@ def geraTxt():
 
 
     
-    pick_group = leia_int("Servidor: ")
-    qtblocos = leia_int("Numero de blocos no Condominio: ")
+    #pick_group = leia_int("Servidor: ")
+
+    resp = input("O condominio possui blocos?[S/N]").strip().lower()
+
+    if resp == 's':
+        qtblocos = leia_int("Numero de blocos no Condominio: ")
+    else: 
+        qtblocos = 1
+        idBloco.append("Padrão")
+
+    pick_group = qtblocos
+
     contexto = leia_int("Contexto do Condominio (Ex: 22): ")
     ap_andar = leia_int("Numero de andar por prédio: ")
 
     for a in range(qtblocos):
+      
 
-        print(f"\n--- Bloco {a+1} ---\n")
+        if resp == 's':
+            print(f"\n--- Bloco {a+1} ---\n")
 
-        id_bloco = input("Identificação dos blocos (Ex.: A, B, C ou 1, 2, 3 etc.): ")
-        idBloco.append(id_bloco)
+            id_bloco = input("Identificação dos blocos (Ex.: A, B, C ou 1, 2, 3 etc.): ")
+            idBloco.append(id_bloco)
 
         print("Numeração das unidades nos andares (ex.: faixas: 10-18, 101-118, etc.)")
         faixas = []
@@ -82,9 +94,12 @@ def geraTxt():
                                 letra = 'C'
                             case 4 :
                                 letra = 'D'
-
-                        ramal.append(str(contexto) + str(i) + "0" + str(j))
-                        display.append("Apto " +  str(i) +" " + letra)
+                        if resp == 'n':
+                            ramal.append(str(contexto) +"0"+ str(i) + "0" + str(j))
+                            display.append("Apto " +  str(i) +" " + letra)
+                        else:
+                            ramal.append(str(contexto) + f"{a+1}" + str(i) + "0" + str(j))
+                            display.append("Apto " +  str(i) +" " + letra + " BL" + f"{a+1}")
                     ramaisChamadores.append(str(contexto) + str(i))
                     displayChamadores.append("Chamador " + str(i) + " ")
                     print(i)
@@ -111,6 +126,59 @@ def geraTxt():
         print("\n\n\n----------GERANDO PJSIP_ADDITIONAL.TXT-----------\n\n\n")
 
         for i in range(qt):
+
+            if i == 0:
+                padrao = f'''[{contexto}]
+auth=auth{contexto}
+aors={contexto}
+type=endpoint
+language=pt_BR
+deny=0.0.0.0/0.0.0.0
+disallow=all
+context=condominio-{str(contexto).strip()}
+trust_id_inbound=yes
+send_rpid=no
+transport=transport-udp
+rtcp_mux=no
+call_group={contexto}
+pickup_group={pick_group}
+allow=ulaw,alaw,h264,h263
+mailboxes=1001@default
+permit=0.0.0.0/0.0.0.0
+ice_support=no
+use_avpf=no
+dtls_cert_file=
+dtls_private_key=
+dtls_ca_file=
+dtls_setup=actpass
+dtls_verify=no
+media_encryption=no
+message_context=mensagens_texto
+subscribe_context=
+allow_subscribe=yes
+stir_shaken=off
+rtp_symmetric=yes
+force_rport=yes
+rewrite_contact=yes
+direct_media=no
+media_use_received_transport=no
+callerid=Etiqueta<{ramal[i]}>
+
+[auth{contexto}]
+type=auth
+auth_type=userpass
+username={contexto}
+password=Teste135@
+
+[{contexto}]
+type=aor
+qualify_frequency=60
+max_contacts=1
+remove_existing=no
+qualify_timeout=3.0
+authenticate_qualify=no
+'''
+                saida.write(padrao + "\n")
         
             padrao = f'''[{ramal[i]}]
 auth=auth{ramal[i]}
