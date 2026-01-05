@@ -33,19 +33,46 @@ def geraCondominioCuston(contextoPasta,ramal ):
 
     for contexto in range(10,51):
 
+
         padrao = f'''[condominio-{contexto}-custom]
     ; intercepta chamadas internas
               exten => _X.,1,NoOp(Chamada interna: ${{CALLERID(num)}} -> ${{EXTEN}})
-    ; envia para o contexto que adiciona o prefixo
-              same => n,Goto(cond{contexto},${{EXTEN}},1)
- 
+
+              ; envia para o contexto que adiciona o prefixo
+                  same => n(ok),Goto(cond{contexto},${{EXTEN}},1)
+
     [cond{contexto}]
              exten => _X.,1,NoOp(Adicionando Prefixo ao Numero Discado)
-             exten => _X.,n,Set(NEWNUM={contexto}${{EXTEN}})
-             exten => _X.,n,Goto(condominio-{contexto},${{NEWNUM}},1)
-             
-;-----------------------------------------------------------------------------------------
-             '''
+             same => n,Set(PG10=${{PJSIP_ENDPOINT({contexto},pickup_group)}})
+
+;--------------------------------------------------------------------------
+
+             same => n,GotoIf($["${{PG10}}"="1"]?prefix100:prefix10)
+
+             same => n(prefix10),Set(NEWNUM=10${{EXTEN}})
+             same => n,Goto(fim)
+
+             same => n(prefix100),Set(NEWNUM=100${{EXTEN}})
+
+             same => n(fim),NoOp(Numero final: ${{NEWNUM}})
+
+----------------------------------------------------------------------------
+
+            ; testa se o ramal existe como endpoint PJSIP
+                      same => n,Set(EP_CONTEXT=${{PJSIP_ENDPOINT(${{NEWNUM}},context)}})
+                      same => n,NoOp(Contexto do endpoint ${{NEWNUM}}: ${{EP_CONTEXT}})
+                      same => n,GotoIf($["${{EP_CONTEXT}}"!=""]?existe:naoexiste)
+
+                      ; NÃO EXISTE
+                               same => n(naoexiste),Answer()
+                               same => n,Playback(custom/unidadeerrada02)
+                               same => n,Hangup()
+
+                      ; EXISTE → segue fluxo normal
+                               exten => _X.,n(existe),Goto(condominio-{contexto}_rulematch,${{NEWNUM}},1)
+        
+        
+        '''
         
         arquivo.write(padrao + "\n")
     
