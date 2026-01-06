@@ -9,9 +9,9 @@ def geraCondominioCuston(contextoPasta,ramal ):
         with open(output_path, "w", encoding="utf-8") as arquivo:
             arquivo.write(f"\n;==============\n; Condominio {contextoPasta}\n;============== ")
             j = 2
-            print(ramal)
+         
             for i in range(len(ramal)):
-                print(f"\n\n{ramal[i]}")
+              
                 padrao = f"exten => {ramal[i]},hint,PJSIP/{ramal[i]}&Custom:DND{ramal[i]}"
             
                 # Separa com espaço cada andar o documento

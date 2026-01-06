@@ -102,7 +102,7 @@ def geraTxt():
                             display.append("Apto " +  str(i) +" " + letra + " BL" + f"{a+1}")
                     ramaisChamadores.append(str(contexto) + str(i))
                     displayChamadores.append("Chamador " + str(i) + " ")
-                    print(i)
+              
 
 
         # Abre arquivo
