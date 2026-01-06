@@ -97,11 +97,18 @@ def geraTxt():
                         if resp == 'n':
                             ramal.append(str(contexto) +"0"+ str(i) + "0" + str(j))
                             display.append("Apto " +  str(i) +" " + letra)
+
+                            ramaisChamadores.append(str(contexto) +"0" +  str(i))
+                            displayChamadores.append("Chamador " + str(i) + " ")
                         else:
                             ramal.append(str(contexto) + f"{a+1}" + str(i) + "0" + str(j))
                             display.append("Apto " +  str(i) +" " + letra + " BL" + f"{a+1}")
-                    ramaisChamadores.append(str(contexto) + str(i))
-                    displayChamadores.append("Chamador " + str(i) + " ")
+
+                            ramal.append(str(contexto) + f"{a+1}" + str(i))
+                            displayChamadores.append("Chamador " + str(i) + " " + " BL" + f"{a+1}" )
+
+
+               
               
 
 
