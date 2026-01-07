@@ -98,14 +98,18 @@ def geraTxt():
                             ramal.append(str(contexto) +"0"+ str(i) + "0" + str(j))
                             display.append("Apto " +  str(i) +" " + letra)
 
-                            ramaisChamadores.append(str(contexto) +"0" +  str(i))
-                            displayChamadores.append("Chamador " + str(i) + " ")
+                           
                         else:
                             ramal.append(str(contexto) + f"{a+1}" + str(i) + "0" + str(j))
                             display.append("Apto " +  str(i) +" " + letra + " BL" + f"{a+1}")
-
-                            ramal.append(str(contexto) + f"{a+1}" + str(i))
+                        
+                        if resp == 'n' and j == 1:
+                            ramaisChamadores.append(str(contexto) +"0" +  str(i))
+                            displayChamadores.append("Chamador " + str(i) + " ")
+                        elif resp == 's' and j == 1: 
+                            ramaisChamadores.append(str(contexto) + f"{a+1}" + str(i))
                             displayChamadores.append("Chamador " + str(i) + " " + " BL" + f"{a+1}" )
+                        
 
 
                
@@ -186,6 +190,8 @@ qualify_timeout=3.0
 authenticate_qualify=no
 '''
                 saida.write(padrao + "\n")
+                
+              
         
             padrao = f'''[{ramal[i]}]
 auth=auth{ramal[i]}
