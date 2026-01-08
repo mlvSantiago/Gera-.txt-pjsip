@@ -23,12 +23,19 @@ def geraTxt():
     allPassword = []
     idBloco = []
     
-
-
+    try:
+        print("\n--- Dados do Condominio ---\n")
+        tipo = ''
+        while tipo not in ['v', 'h']:
+             tipo = input("O condominio é vertical ou horizontal? [V/H] ").strip().lower()
     
+    except ValueError:
+        print("ERRO: Digite uma opção válida!")
+        return geraTxt()
+
     #pick_group = leia_int("Servidor: ")
 
-    resp = input("O condominio possui blocos?[S/N]").strip().lower()
+    resp = input("O condominio possui blocos/Quadras?[S/N]").strip().lower()
 
     if resp == 's':
         qtblocos = leia_int("Numero de blocos no Condominio: ")
@@ -39,27 +46,28 @@ def geraTxt():
     pick_group = qtblocos
 
     contexto = leia_int("Contexto do Condominio (Ex: 22): ")
-    ap_andar = leia_int("Numero de andar por prédio: ")
+
+    if tipo == 'v':
+        ap_andar = leia_int("Numero de andar por prédio: ")
 
     for a in range(qtblocos):
       
 
         if resp == 's':
-            print(f"\n--- Bloco {a+1} ---\n")
+            print(f"\n--- Bloco/Quadra {a+1} ---\n")
 
-            id_bloco = input("Identificação dos blocos (Ex.: A, B, C ou 1, 2, 3 etc.): ")
+            id_bloco = input("Identificação dos blocos/quadra (Ex.: A, B, C ou 1, 2, 3 etc.): ")
             idBloco.append(id_bloco)
 
         print("Numeração das unidades nos andares (ex.: faixas: 10-18, 101-118, etc.)")
         faixas = []
 
-
-        for i in range(ap_andar):
-            entrada = input(f"Faixa {i+1}: ")          
+        if tipo == 'h':
+            entrada = input(f"Faixa única: ")          
 
             while '-' not in entrada:
                 print("\nSEPARADOR '-' AUSENTE!\n")
-                entrada = input(f"Faixa {i+1}: ")     
+                entrada = input(f"Faixa única: ")     
 
         
             partes = entrada.split("-")               # divide: ["10 ", " 18"]
@@ -69,6 +77,25 @@ def geraTxt():
             fim = int(partes[1].strip())
 
             faixas.append((inicio, fim))
+
+        else:
+
+
+            for i in range(ap_andar):
+                entrada = input(f"Faixa {i+1}: ")          
+
+                while '-' not in entrada:
+                    print("\nSEPARADOR '-' AUSENTE!\n")
+                    entrada = input(f"Faixa {i+1}: ")     
+
+            
+                partes = entrada.split("-")               # divide: ["10 ", " 18"]
+                
+                # strip em cada parte
+                inicio = int(partes[0].strip())
+                fim = int(partes[1].strip())
+
+                faixas.append((inicio, fim))
 
       
 
@@ -95,20 +122,28 @@ def geraTxt():
                             case 4 :
                                 letra = 'D'
                         if resp == 'n':
-                            ramal.append(str(contexto) +"0"+ str(i) + "0" + str(j))
-                            display.append("Apto " +  str(i) +" " + letra)
+                            ramal.append(str(contexto) + str(i) + "0" + str(j))
+                            if tipo == 'v':
+                                display.append("Apto " +  str(i) +" " + letra)
+                            else:
+                                display.append("Casa " +  str(i) +" " + letra)
 
-                           
                         else:
                             ramal.append(str(contexto) + f"{a+1}" + str(i) + "0" + str(j))
-                            display.append("Apto " +  str(i) +" " + letra + " BL" + f"{a+1}")
-                        
+                            if tipo == 'v':
+                                display.append("Apto " +  str(i) +" " + letra + " BL" +  f"{a+1}")
+                            else:
+                                display.append("Casa " +  str(i) +" " + letra + "Rua" +  f"{a+1}")
+                    ## Tratando chamdadores
                         if resp == 'n' and j == 1:
-                            ramaisChamadores.append(str(contexto) +"0" +  str(i))
+                            ramaisChamadores.append(str(contexto)  +  str(i))
                             displayChamadores.append("Chamador " + str(i) + " ")
                         elif resp == 's' and j == 1: 
                             ramaisChamadores.append(str(contexto) + f"{a+1}" + str(i))
-                            displayChamadores.append("Chamador " + str(i) + " " + " BL" + f"{a+1}" )
+                            if tipo == 'h':
+                                displayChamadores.append("Chamador " + str(i) + " Rua" + f"{a+1}")
+                            else:
+                                displayChamadores.append("Chamador " + str(i) + " " + " BL" + f"{a+1}")
                         
 
 
