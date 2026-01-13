@@ -175,8 +175,8 @@ def geraTxt():
 
             if i == 0:
                 padrao = f'''[{contexto}999]
-auth=auth{contexto}
-aors={contexto}
+auth=auth{contexto}999
+aors={contexto}999
 type=endpoint
 language=pt_BR
 deny=0.0.0.0/0.0.0.0
@@ -211,12 +211,12 @@ media_use_received_transport=no
 set_var=VALIDA=1
 set_var=FLAG01=1
 set_var=FLAG02=1
-callerid=Etiqueta<{ramal[i]}>
+callerid=Etiqueta<{ramal[i]}999>
 
 [auth{contexto}]
 type=auth
 auth_type=userpass
-username={contexto}
+username={contexto}999
 password=Teste135@
 
 [{contexto}999]
