@@ -174,7 +174,7 @@ def geraTxt():
         for i in range(qt):
 
             if i == 0:
-                padrao = f'''[{contexto}1234]
+                padrao = f'''[{contexto}999]
 auth=auth{contexto}
 aors={contexto}
 type=endpoint
@@ -209,8 +209,8 @@ rewrite_contact=yes
 direct_media=no
 media_use_received_transport=no
 set_var=VALIDA=1
-set_var=FLAG01=
-set_var=FLAG02=
+set_var=FLAG01=1
+set_var=FLAG02=1
 callerid=Etiqueta<{ramal[i]}>
 
 [auth{contexto}]
@@ -219,7 +219,7 @@ auth_type=userpass
 username={contexto}
 password=Teste135@
 
-[{contexto}1234]
+[{contexto}999]
 type=aor
 qualify_frequency=60
 max_contacts=1
@@ -266,8 +266,8 @@ rewrite_contact=yes
 direct_media=no
 media_use_received_transport=no
 set_var=COMPLETO=1
-set_var=FLAG01=
-set_var=FLAG02=
+set_var=FLAG01=1
+set_var=FLAG02=1
 callerid={display[i]} <{ramal[i]}>
 
 [auth{ramal[i]}]
@@ -325,8 +325,8 @@ force_rport=yes
 rewrite_contact=yes
 direct_media=no
 media_use_received_transport=no
-set_var=FLAG01=
-set_var=FLAG02=
+set_var=FLAG01=1
+set_var=FLAG02=1
 callerid={displayChamadores[i]} <{ramaisChamadores[i]}>
 
 [auth{ramaisChamadores[i]}]
