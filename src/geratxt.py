@@ -219,7 +219,7 @@ auth_type=userpass
 username={contexto}
 password=Teste135@
 
-[{contexto}]
+[{contexto}1234]
 type=aor
 qualify_frequency=60
 max_contacts=1
