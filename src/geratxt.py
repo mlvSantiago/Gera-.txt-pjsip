@@ -223,7 +223,8 @@ password=Teste135@
 type=aor
 qualify_frequency=60
 max_contacts=1
-remove_existing=no
+remove_existing=no'
+
 qualify_timeout=3.0
 authenticate_qualify=no
 '''

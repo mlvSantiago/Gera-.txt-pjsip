@@ -35,39 +35,41 @@ def geraCondominioCuston(contextoPasta,ramal ):
                 padrao = f'''[condominio-{contexto}-custom]
     ; intercepta chamadas internas
               exten => _X.,1,NoOp(Chamada interna: ${{CALLERID(num)}} -> ${{EXTEN}})
-
-              ; envia para o contexto que adiciona o prefixo
-                  same => n(ok),Goto(cond{contexto},${{EXTEN}},1)
+            ;--------------------------------------------------------------------------
+            ; testa se o ramal efoi digitado completo, inclusive com condominio
+            ;--------------------------------------------------------------------------
+                      same => n,Set(EP_CONTEXT=${{PJSIP_ENDPOINT(${{EXTEN}},context)}})
+                      same => n,NoOp(Contexto do endpoint ${{EXTEN}}: ${{EP_CONTEXT}})
+                      same => n,GotoIf($["${{EP_CONTEXT}}"!=""]?existe{contexto}:ok{contexto})
+            ;--------------------------------------------------------------------------
+            ; envia para o contexto que adiciona o prefixo
+            ;--------------------------------------------------------------------------
+                  same => n(ok{contexto}),Goto(cond{contexto},${{EXTEN}},1)
+                  exten => _X.,n(existe{contexto}),Goto(condominio-{contexto}_rulematch,${{NEWNUM}},1)
 
     [cond{contexto}]
-             exten => _X.,1,NoOp(Adicionando Prefixo ao Numero Discado)
-             same => n,Set(PG10=${{PJSIP_ENDPOINT({contexto},pickup_group)}})
-
-;--------------------------------------------------------------------------
-
-             same => n,GotoIf($["${{PG10}}"="1"]?prefix100:prefix10)
-
-             same => n(prefix10),Set(NEWNUM=10${{EXTEN}})
-             same => n,Goto(fim)
-
-             same => n(prefix100),Set(NEWNUM=100${{EXTEN}})
-
+             exten => _X.,1,NoOp(Adicionando Prefixo ao Numero Discado)          
+             same => n,Set(NEWNUM={contexto}${{EXTEN}})             
              same => n(fim),NoOp(Numero final: ${{NEWNUM}})
-
-----------------------------------------------------------------------------
-
+            ;--------------------------------------------------------------------------
             ; testa se o ramal existe como endpoint PJSIP
+            ;--------------------------------------------------------------------------
                       same => n,Set(EP_CONTEXT=${{PJSIP_ENDPOINT(${{NEWNUM}},context)}})
                       same => n,NoOp(Contexto do endpoint ${{NEWNUM}}: ${{EP_CONTEXT}})
-                      same => n,GotoIf($["${{EP_CONTEXT}}"!=""]?existe:naoexiste)
-
-                      ; NÃO EXISTE
-                               same => n(naoexiste),Answer()
+                      same => n,GotoIf($["${{EP_CONTEXT}}"!=""]?this{contexto}:naoexiste{contexto})
+            ;--------------------------------------------------------------------------
+            ; NÃO EXISTE
+            ;--------------------------------------------------------------------------
+                               same => n(naoexiste{contexto}),Answer()
                                same => n,Playback(custom/unidadeerrada02)
                                same => n,Hangup()
+            ;--------------------------------------------------------------------------
+            ; EXISTE → segue fluxo normal
+            ;--------------------------------------------------------------------------
+                               exten => _X.,n(this{contexto}),Goto(condominio-{contexto}_rulematch,${{NEWNUM}},1)
 
-                      ; EXISTE → segue fluxo normal
-                               exten => _X.,n(existe),Goto(condominio-{contexto}_rulematch,${{NEWNUM}},1)
+;------------------------------------------------------------------
+
         
         
         '''
